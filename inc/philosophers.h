@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:55:43 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/02 14:25:13 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/02 16:04:43 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct s_data
 	int			num_time_each_philosopher_must_eat;
 
 	int			time_to_think;
+	int			someone_dead;
+	pthread_mutex_t	someone_dead_m;
 }	t_data;
 
 typedef struct s_philo

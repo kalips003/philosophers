@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/02 09:14:39 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/02 16:05:10 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	ft_check_args(int ac, char **av, t_data *data)
 		put(ERR"WONT SOMEBODY PLEASE THINK OF THE CHILDREN ?!?\n");
 	data->time_to_think = data->time_to_die - (data->time_to_eat + data->time_to_sleep - 1);
 	gettimeofday(&data->time_start, NULL);
+	pthread_mutex_init(&data->someone_dead_m, NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////////]

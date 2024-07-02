@@ -12,18 +12,22 @@ all: $(NAME)
 # ╰──────────────────────────────────────────────────────────────────────╯
 
 # num_philo . time_to_die . time_to_eat . time_to_sleep . [num_time_each_philosopher_must_eat]
-NUM_PHILO = 3
+NUM_PHILO = 4
 TIME_DIE = 500
 TIME_EAT = 300
 TIME_SLEEP = 800
 
 
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
-ARG2 = 3 50 2 15 3
+ARG2 = 1 4 2 1 1
 
 a: $(NAME)
 	@$(call random_shmol_cat, teshting ... $@ !, 'hav fun ね? ($(word 1, $^))', $(CLS), );
 	./$(word 1, $^) $(ARG)
+
+c: $(NAME)
+	@$(call random_shmol_cat, teshting ... $@ !, 'hav fun ね? ($(word 1, $^))', $(CLS), );
+	./$(word 1, $^) $(ARG2)
 
 b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );
