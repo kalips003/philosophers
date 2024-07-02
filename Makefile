@@ -12,10 +12,10 @@ all: $(NAME)
 # ╰──────────────────────────────────────────────────────────────────────╯
 
 # num_philo . time_to_die . time_to_eat . time_to_sleep . [num_time_each_philosopher_must_eat]
-NUM_PHILO = 4
+NUM_PHILO = 6
 TIME_DIE = 500
 TIME_EAT = 300
-TIME_SLEEP = 800
+TIME_SLEEP = 150
 
 
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
@@ -180,7 +180,7 @@ VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes 
 #
 # 	monitor stack activiity
 # valgrind --tool=massif --stacks=yes ./your_program
-# 
+#
 # lldb: clean all
 # 	@lldb ./$(NAME) $(ARGS)
 #
