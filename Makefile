@@ -2,23 +2,24 @@ NAME = philosophers
 NAME_BONUS = philosophers_b
 
 CC = cc
-FLAGS = -Wextra -Wall -g -fPIE -I$(HEADER_FOLDER)
-# FLAGS = -Wextra -Wall -Werror -g -fPIE -I$(HEADER_FOLDER)
+# FLAGS = -Wextra -Wall -g -fPIE -I$(HEADER_FOLDER)
+FLAGS = -Wextra -Wall -Werror -g -fPIE -I$(HEADER_FOLDER)
 
 all: $(NAME)
 
 # ╭──────────────────────────────────────────────────────────────────────╮
 # │                  	 	        TESTING                    	         │
 # ╰──────────────────────────────────────────────────────────────────────╯
-
+NAMEE = philosophers
+NAMEE_BONUS = philosophers_b
 # num_philo . time_to_die . time_to_eat . time_to_sleep . [num_time_each_philosopher_must_eat]
-NUM_PHILO = 6
-TIME_DIE = 500
+NUM_PHILO = 5
+TIME_DIE = 605
 TIME_EAT = 300
-TIME_SLEEP = 150
+TIME_SLEEP = 300
 
 
-ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
+ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
 ARG2 = 1 4 2 1 1
 
 a: $(NAME)
@@ -38,14 +39,48 @@ v: $(NAME)
 	@$(call random_shmol_cat, "vlgrininnng ... $(NAME_BONUS)!", "$@: $(MAP1)", $(CLS), );
 	-$(VALGRIND) ./$(word 1, $^) $(ARG)
 
+BAD_ARGS = "3 5 1 1 2a" \
+			"3 5 1 wtf" \
+			"3 5 1 -2147483648 -2147483650" \
+			"3 5 1 2147483646 2147483647" \
+			"3 5 1 9999999999 9" \
+			"4 3 2" \
+			"4 3 2 1 1 1" \
+			"" \
+			" "  \
+			"4 3 - 00000" \
+			"i want ... youuu" \
+			"5 1-2 4 5"
 
-BAD_ARGS = "-1 3 45 5"
-BAD_ARGS = "2S 3 45 5"
+BAD_ARGS_INF = "0 5 2 1" \
+			"1 100 50 5" \
+			"500 5 2 1" \
+			"7 100 200 5" \
+			"7 100 10 300" \
+			"6 100 49 49 3" \
+			"5 100 33 66 3"
 
-m: $(NAME)
+# MAKE N: Run a dozen bad arguments, with valgrind
+# 
+n: $(NAMEE)
+	@for arg in $(BAD_ARGS); do \
+	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
+	$(VALGRIND) ./$(word 1, $^) $$arg; \
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	done
+	@$(call random_shmol_cat, this one is for valgriind output only:, valgrind doesnt like philosophers、some will die, $(CLS), )
+	$(VALGRIND) ./$(word 1, $^) 3 15 2 1 2
+
+# MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
+# 
+m: $(NAMEE)
+	@for arg in $(BAD_ARGS_INF); do \
+	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
+	./$(word 1, $^) $$arg; \
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	done
 
 ULIMIT = 15
-
 m2: $(NAME)
 	@$(call random_shmol_cat, "\'trying to make shit crash", "try n break it.. にゃ?", $(CLS), );
 	@(ulimit -s $(ULIMIT); ./$(word 1, $^) $(ARG))
@@ -92,6 +127,9 @@ $(NAME): libft $(OBJ) main.c
 	fi
 	$(call print_cat, $(CLEAR), $(GOLD), $(GREEN1), $(GREEN1), $(call pad_word, 10, $(NAME)), $(call pad_word, 12, "Compiled~"));
 
+abc: libft $(OBJ) main.c
+	@rm -f $(NAME)
+	$(CC) $(FLAGS) $(OBJ) main.c lib/libft.a -lm -o $(NAME)
 
 src/obj/%.o: src/%.c inc/$(NAME).h
 	@if [ ! -e $(OBJ_FOLDER) ]; then\
@@ -159,12 +197,12 @@ vtest:	libft
 
 clean:
 	@rm -rf $(OBJ_FOLDER)
-	$(call print_cat, $(CLEAR), $(COLOR_2R_2G_5B), $(COLOR_3R_2G_0B), $(COLOR_4R_5G_0B), $(call pad_word, 10, "Objects"), $(call pad_word, 12, "Exterminated"));
+	@$(call print_cat, $(CLEAR), $(COLOR_2R_2G_5B), $(COLOR_3R_2G_0B), $(COLOR_4R_5G_0B), $(call pad_word, 10, "Objects"), $(call pad_word, 12, "Exterminated"));
 
 fclean: clean
 	@rm -rf $(NAME) $(NAME_BONUS)
 	@make -sC lib clean_silent;
-	$(call print_cat, $(CLEAR), $(COLOR_1R_2G_0B), $(COLOR_3R_0G_0B), $(COLOR_2R_1G_0B), $(call pad_word, 10, "All⠀clean"), $(call pad_word, 12, "Miaster"));
+	@$(call print_cat, $(CLEAR), $(COLOR_1R_2G_0B), $(COLOR_3R_0G_0B), $(COLOR_2R_1G_0B), $(call pad_word, 10, "All⠀clean"), $(call pad_word, 12, "Miaster"));
 
 re: fclean all bonus
 
@@ -175,8 +213,8 @@ re_bonus: fclean
 .SILENT: $(NAME) bonus
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - -  - VALGRIND
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --track-fds=yes
-# VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --trace-children=yes --track-fds=yes
+# VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --track-fds=yes
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --trace-children=yes --track-fds=yes
 #
 # 	monitor stack activiity
 # valgrind --tool=massif --stacks=yes ./your_program

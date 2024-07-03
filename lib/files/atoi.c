@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:34:49 by agallon           #+#    #+#             */
-/*   Updated: 2024/07/02 00:48:02 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 14:12:02 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int	ft_atoi(char *str, int *error)
 		sign = -1;
 	else if (str[0] == '+')
 		i++;
+	if (!(str[i] >= '0' && str[i] <= '9'))
+		*error = -4;
 	while (str[i] >= '0' && str[i] <= '9')
 		rtrn = rtrn * 10 + (str[i++] - '0');
 	rtrn *= sign;

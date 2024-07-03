@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   B_.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agallon <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 01:02:23 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/02 18:44:46 by agallon          ###   ########.fr       */
+/*   Updated: 2024/07/03 14:17:15 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 #include "philosophers.h"
 
 void	*ft_thread_starve(void *arg);
+int		is_dead(t_philo *philo);
 void	*ft_philo(void *arg);
 
 void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
-int		is_dead(t_philo *philo);
 ///////////////////////////////////////////////////////////////////////////////]
 void	*ft_thread_starve(void *arg)
 {
 	t_philo *philo;
 
 	philo = (t_philo*)arg;
-	while (!is_dead(philo) && philo->time_eaten != philo->data->num_time_each_philosopher_must_eat)
+	while (!is_dead(philo) && philo->time_eaten != philo->data->max_meal)
 	{
 		if (get_time_diff_in_milli(philo->time) > philo->data->time_to_die)
 		{
 			philo->dead = 1;
-			if (philo->data->num_time_each_philosopher_must_eat < 0)
+			if (philo->data->max_meal < 0)
 			{
 				pthread_mutex_lock(&philo->data->someone_dead_m);
 				philo->data->someone_dead++;
@@ -77,7 +77,7 @@ void	*ft_philo(void *arg)
 		usleep(1000);
 	if (pthread_create(&thread_starve, NULL, &ft_thread_starve, arg))
 		return (put("Error creating thread for philosopher %d\n"), NULL);
-	while (!is_dead(philo) && philo->time_eaten != philo->data->num_time_each_philosopher_must_eat)
+	while (!is_dead(philo) && philo->time_eaten != philo->data->max_meal)
 	{
 		if (!is_dead(philo) && philo->doing == THINKING && get_time_diff_in_milli(philo->time) > philo->data->time_to_think)
 			philo->doing = AVAILABLE;
@@ -85,13 +85,13 @@ void	*ft_philo(void *arg)
 			ft_eat(philo);
 		if (!is_dead(philo) && philo->doing == EATING && get_time_diff_in_milli(philo->time) > philo->data->time_to_eat)
 			ft_sleep(philo);
-		if (philo->time_eaten == philo->data->num_time_each_philosopher_must_eat)
+		if (philo->time_eaten == philo->data->max_meal)
 			break ;
 		if (!is_dead(philo) && philo->doing == SLEEPING && get_time_diff_in_milli(philo->time) > philo->data->time_to_sleep + philo->data->time_to_eat)
 			ft_think(philo);
 	}
 	pthread_join(thread_starve, NULL);
-	// if (!is_dead(philo) && philo->data->num_time_each_philosopher_must_eat >= 0)
+	// if (!is_dead(philo) && philo->data->max_meal >= 0)
 		// printf("%ld ms) =====> %i went to heaven with a full belly\n", get_time_diff_in_milli(philo->data->time_start), philo->philo_i);
 	// printf("%ld) -----------------------------------------> %i ended\n", get_time_diff_in_milli(philo->data->time_start), philo->philo_i);
 	return (NULL);
@@ -158,7 +158,7 @@ void	ft_sleep(t_philo *philo)
 	if (is_dead(philo))
 		return ;
 	// printf("%ld ms) [%i] put back his forks (%p)(%p)\n", get_time_diff_in_milli(philo->data->time_start), philo->philo_i, philo->fork_r, philo->fork_l);
-	if (++philo->time_eaten == philo->data->num_time_each_philosopher_must_eat)
+	if (++philo->time_eaten == philo->data->max_meal)
 		return ;
 	// printf("%ld ms) - - [%i] is sleeping\n", get_time_diff_in_milli(philo->data->time_start), philo->philo_i);
 	printf("%ld %i is sleeping\n", get_time_diff_in_milli(philo->data->time_start), philo->philo_i);

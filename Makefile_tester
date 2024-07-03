@@ -1,0 +1,100 @@
+
+# ------------------------------------------------------------------------------------------------------------- >
+# 
+# 				████████╗███████╗░██████╗████████╗███████╗██╗░░░██╗██████╗░
+# 				╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝██╔════╝██║░░░██║██╔══██╗
+# 				░░░██║░░░█████╗░░╚█████╗░░░░██║░░░█████╗░░██║░░░██║██████╔╝
+# 				░░░██║░░░██╔══╝░░░╚═══██╗░░░██║░░░██╔══╝░░██║░░░██║██╔══██╗
+# 				░░░██║░░░███████╗██████╔╝░░░██║░░░███████╗╚██████╔╝██║░░██║
+# 				░░░╚═╝░░░╚══════╝╚═════╝░░░░╚═╝░░░╚══════╝░╚═════╝░╚═╝░░╚═╝
+
+# 	COPY PASTE ALL OF THIS SOMEWHERE IN YOUR MAKEFILE
+# 	MAKE SURE THE NAME OF THE PROJECT IS:
+# 		$(NAME) = philosophers
+# 		$(NAME_BONUS) = philosophers_bonus
+# 	or else change the values of below
+
+# 	AVAILABLE: (see desccription below)
+# 	make a
+# 	make m
+# 	make n
+
+NAMEE = philosophers
+NAMEE_BONUS = philosophers_bonus
+
+NUM_PHILO = 5
+TIME_DIE = 605
+TIME_EAT = 300
+TIME_SLEEP = 300
+
+ARGZ = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
+
+# MAKE A: Run with argz
+# 
+a: $(NAMEE)
+	@$(call random_shmol_cat, "\'tis $(NAMEE): $(ARG)", 死ぬかな..., $(CLS), );
+	./$(word 1, $^) $(ARGZ)
+
+
+# MAKE N: Run a dozen bad arguments, with valgrind
+# 
+n: $(NAMEE)
+	@for arg in $(BAD_ARGS); do \
+	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
+	$(VALGRIIND) ./$(word 1, $^) $$arg; \
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	done
+	@$(call random_shmol_cat, this one is for valgriind output only:, valgrind doesnt like philosophers、some will die, $(CLS), )
+	$(VALGRIIND) ./$(word 1, $^) 3 15 2 1 2
+
+BAD_ARGS = "3 5 1 1 2a" \
+			"3 5 1 wtf" \
+			"3 5 1 -2147483648 -2147483650" \
+			"3 5 1 2147483646 2147483647" \
+			"3 5 1 9999999999 9" \
+			"4 3 2" \
+			"4 3 2 1 1 1" \
+			"" \
+			" "  \
+			"4 3 - 00000" \
+			"i want ... youuu" \
+			"5 1-2 4 5"
+
+
+# MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
+# 
+m: $(NAMEE)
+	@for arg in $(BAD_ARGS_INF); do \
+	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
+	./$(word 1, $^) $$arg; \
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	done
+	@$(call random_shmol_cat, dis last one should live forever:, "5 100 33 66 3", $(CLS), )
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	./$(word 1, $^) 5 100 33 66 3
+
+BAD_ARGS_INF = "0 5 2 1" \
+			"1 100 50 5" \
+			"500 5 2 1" \
+			"7 100 200 5" \
+			"7 100 10 300" \
+			"6 100 49 49 3" \
+			"5 100 33 66 3"
+
+# ------------------------------------------------------------------------------------------------------------- >
+# @$(call random_shmol_cat, text 1, text 2, $(CLS), $(RESET));
+# $(1)= $(CLEAR); $(2)= text1; $(3)= text2; $(4)= $(RESET)
+define random_shmol_cat
+	COLOR=$$(printf "\033[38;5;%dm" $$(shuf -i 1-255 -n 1)); \
+	COLOR2=$$(printf "\033[38;5;%dm" $$(shuf -i 0-255 -n 1)); \
+	echo "$(3)$${COLOR2}\
+	\tにゃ~$${COLOR}\t⠀╱|、\n\
+	\t\t(˚ˎ。7⠀⠀⠀$${COLOR2}~ $(1) ~$${COLOR}\n\
+	\t\t⠀|、˜\\\\\t\t$${COLOR2}~ $(2)$${COLOR}\n\
+	\t\t⠀じしˍ)ノ\n$(4)"
+endef
+
+CLS = \033[2J\033[H
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - -  - VALGRIIND
+VALGRIIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --track-fds=yes
+# ------------------------------------------------------------------------------------------------------------- >

@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:55:43 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/02 16:04:43 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 14:28:50 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef unsigned int useconds_t;
 //			▒█░░▒█ ▒█░▒█ ▒█░░▀█ ▒█▄▄▀ ▒█░▒█ ░▒█░░ ▒█▄▄▄█ ▒█░▒█ ░░▒█░░
 //useconds_t
 ///////////////////////////////////////////////////////////////////////////////]
-// num_philo . time_to_die . time_to_eat . time_to_sleep . [num_time_each_philosopher_must_eat]
+// num_philo . time_to_die . time_to_eat . time_to_sleep . [max_meal]
 
 // struct timeval {
 // 	time_t	  tv_sec;  // seconds
@@ -57,7 +57,7 @@ typedef struct s_data
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
-	int			num_time_each_philosopher_must_eat;
+	int			max_meal;
 
 	int			time_to_think;
 	int			someone_dead;
@@ -82,8 +82,7 @@ typedef struct s_philo
 /********************************
 		A
 ********************************/
-void	ft_check_args(int ac, char **av, t_data *data);
-void	ft_ini_philo(t_data *data);
+void		ft_ini(int ac, char **av, t_data *data);
 
 
 
