@@ -13,7 +13,7 @@ all: $(NAME)
 NAMEE = philosophers
 NAMEE_BONUS = philosophers_b
 # num_philo . tt_die . tt_eat . tt_sleep . [num_time_each_philosopher_must_eat]
-NUM_PHILO = 5
+NUM_PHILO = 6
 TIME_DIE = 605
 TIME_EAT = 300
 TIME_SLEEP = 300
