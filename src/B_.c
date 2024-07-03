@@ -6,145 +6,105 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 01:02:23 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/03 16:26:12 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 17:51:29 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philosophers.h"
 
+void		ft_eat(t_philo *philo);
+static int	ft_eat_0(t_philo *philo);
+static int	ft_eat_1(t_philo *philo);
+void		ft_sleep(t_philo *philo);
+void		ft_think(t_philo *philo);
 
-int		is_dead(t_philo *philo);
-void	ft_eat(t_philo *philo);
-void	ft_sleep(t_philo *philo);
-void	ft_think(t_philo *philo);
-static void	f(t_philo *philo, char *state, char rl);
-
-///////////////////////////////////////////////////////////////////////////////]
-int	is_dead(t_philo *philo)
-{
-	if (philo->dead || philo->data->someone_dead)
-	{
-		if (philo->in_hand & 1)
-		{
-			pthread_mutex_unlock(philo->fork_r);
-			f(philo, "\ttaken from his CORPSE,", 'r');
-			// printf("%.4ld ms) [%i] put back his right forks BY FORCE\n", diff_time_ms(philo->data->time_start), philo->i);
-		}
-		if ((philo->in_hand >> 1) & 1)
-		{
-			pthread_mutex_unlock(philo->fork_l);
-			f(philo, "\ttaken from his CORPSE,", 'l');
-			// printf("%.4ld ms) [%i] put back his left forks BY FORCE\n", diff_time_ms(philo->data->time_start), philo->i);
-		}
-		philo->in_hand = 0;
-		return (1);
-	}
-	return (0);
-}
-
-	// "\twaiting for";
-	// "\thas taken";
-static void	f(t_philo *philo, char *state, char rl)
-{
-	long	time_diff;
-	char	*hand;
-	int		fork;
-
-	time_diff = diff_time_ms(philo->data->time_start);
-	if (rl == 'r')
-	{
-		hand = "right";
-		fork = (unsigned long)philo->fork_r % 256;
-	}
-	else
-	{
-		hand = "left";
-		fork = (unsigned long)philo->fork_l % 256;
-	}
-	printf("%.4ld ms) [%i] %s his %s fork (%d)\n", time_diff, philo->i, state, hand, fork);
-}
 ///////////////////////////////////////////////////////////////////////////////]
 void	ft_eat(t_philo *philo)
 {
+	if (!(!is_dead(philo) && philo->doing == AVAILABLE))
+		return ;
 	if (philo->i % 2)
 	{
-		f(philo, "\twaiting for", 'r');
-		// printf("%.4ld ms) [%i] \twaiting for his right fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		pthread_mutex_lock(philo->fork_r);
-		philo->in_hand |= 0b01;
-		if (is_dead(philo))
+		if (ft_eat_1(philo))
 			return ;
-		f(philo, "\thas taken", 'r');
-		// printf("%.4ld ms) [%i] has taken his right fork (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_r);
-		// printf("%.4ld %i has taken a fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		if (philo->data->num_philo == 1)
-			return ;
-		f(philo, "\twaiting for", 'l');
-		// printf("%.4ld ms) [%i] \twaiting for his left fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		pthread_mutex_lock(philo->fork_l);
-		philo->in_hand |= 0b10;
-		if (is_dead(philo))
-			return ;
-		// printf("%.4ld ms) [%i] has taken his left fork (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_l);
-		f(philo, "\thas taken", 'l');
-		// printf("%.4ld %i has taken a fork\n", diff_time_ms(philo->data->time_start), philo->i);
 	}
 	else
 	{
-		f(philo, "\twaiting for", 'l');
-		// printf("%.4ld ms) [%i] \twaiting for his left fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		pthread_mutex_lock(philo->fork_l);
-		philo->in_hand |= 0b10;
-		if (is_dead(philo))
+		if (ft_eat_0(philo))
 			return ;
-		f(philo, "\thas taken", 'l');
-		// printf("%.4ld ms) [%i] has taken his left fork (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_l);
-		// printf("%.4ld %i has taken a fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		f(philo, "\twaiting for", 'r');
-		// printf("%.4ld ms) [%i] \twaiting for his right fork\n", diff_time_ms(philo->data->time_start), philo->i);
-		pthread_mutex_lock(philo->fork_r);
-		philo->in_hand |= 0b01;
-		if (is_dead(philo))
-			return ;
-		f(philo, "\thas taken", 'r');
-		// printf("%.4ld ms) [%i] has taken his right fork (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_r);
-		// printf("%.4ld %i has taken a fork\n", diff_time_ms(philo->data->time_start), philo->i);
 	}
-	printf("%.4ld ms) == [%i] is eating\n", diff_time_ms(philo->data->time_start), philo->i);
-	// printf("%.4ld %i is eating\n", diff_time_ms(philo->data->time_start), philo->i);
+	philo_speech(philo, " == is eating", 0);
 	philo->doing = EATING;
 	gettimeofday(&philo->time, NULL);
 }
 
+// for even numbers , start with left hand
+static int	ft_eat_0(t_philo *philo)
+{
+	philo_speech(philo, "\twaiting for", 'l');
+	pthread_mutex_lock(philo->fork_l);
+	philo->in_hand |= 0b10;
+	if (is_dead(philo))
+		return (1);
+	philo_speech(philo, C_321"\thas taken", 'l');
+	philo_speech(philo, "\twaiting for", 'r');
+	pthread_mutex_lock(philo->fork_r);
+	philo->in_hand |= 0b01;
+	if (is_dead(philo))
+		return (1);
+	philo_speech(philo, C_321"\thas taken", 'r');
+	return (0);
+}
+
+// for odd numbers , start with right hand
+static int	ft_eat_1(t_philo *philo)
+{
+	philo_speech(philo, "\twaiting for", 'r');
+	pthread_mutex_lock(philo->fork_r);
+	philo->in_hand |= 0b01;
+	if (is_dead(philo))
+		return (1);
+	philo_speech(philo, C_321"\thas taken", 'r');
+	if (philo->data->num_philo == 1)
+		return (1);
+	philo_speech(philo, "\twaiting for", 'l');
+	pthread_mutex_lock(philo->fork_l);
+	philo->in_hand |= 0b10;
+	if (is_dead(philo))
+		return (1);
+	philo_speech(philo, C_321"\thas taken", 'l');
+	return (0);
+}
+
+///////////////////////////////////////////////////////////////////////////////]
 void	ft_sleep(t_philo *philo)
 {
+	if (!(!is_dead(philo) && philo->doing == EATING
+			&& diff_time_ms(philo->time) > philo->data->tt_eat))
+		return ;
 	if (philo->in_hand & 1)
 	{
 		pthread_mutex_unlock(philo->fork_r);
-		f(philo, "\tputs back", 'r');
-		// printf("%.4ld ms) [%i] puts back his right forks (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_r);
+		philo_speech(philo, "\tputs back", 'r');
 	}
 	if ((philo->in_hand >> 1) & 1)
 	{
 		pthread_mutex_unlock(philo->fork_l);
-		f(philo, "\tputs back", 'l');
-		// printf("%.4ld ms) [%i] put back his left forks (%p)\n", diff_time_ms(philo->data->time_start), philo->i, philo->fork_l);
+		philo_speech(philo, "\tputs back", 'l');
 	}
 	philo->in_hand = 0;
-	if (is_dead(philo))
-
-		return ;
 	if (++philo->time_eaten == philo->data->max_meal)
 		return ;
-	printf("%.4ld ms) == == [%i] is sleeping\n", diff_time_ms(philo->data->time_start), philo->i);
-	// printf("%.4ld %i is sleeping\n", diff_time_ms(philo->data->time_start), philo->i);
+	philo_speech(philo, " == == is sleeping", 0);
 	philo->doing = SLEEPING;
 }
 
-void	ft_think(t_philo *philo)
+///////////////////////////////////////////////////////////////////////////////]
+void	ft_think(t_philo *p)
 {
-	printf("%.4ld ms) == == == [%i] is thinking\n", diff_time_ms(philo->data->time_start), philo->i);
-	// printf("%.4ld %i is thinking\n", diff_time_ms(philo->data->time_start), philo->i);
-	philo->doing = THINKING;
+	if (!(!is_dead(p) && p->doing == SLEEPING
+			&& diff_time_ms(p->time) > p->data->tt_eat + p->data->tt_sleep))
+		return ;
+	philo_speech(p, " == == == is thinking", 0);
+	p->doing = THINKING;
 }

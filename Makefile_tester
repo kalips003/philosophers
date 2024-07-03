@@ -12,7 +12,7 @@
 # 	MAKE SURE THE NAME OF THE PROJECT IS:
 # 		$(NAME) = philosophers
 # 		$(NAME_BONUS) = philosophers_bonus
-# 	or else change the values of below
+# 	or else change the values below
 
 # 	AVAILABLE: (see desccription below)
 # 	make a

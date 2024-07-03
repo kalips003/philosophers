@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/03 16:27:59 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 17:54:08 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,19 @@ static void	ft_check_args(int ac, char **av, t_data *data);
 static void	ft_ini_philo(t_data *data);
 static void	h_982(t_data *data, t_philo *philo, int i);
 
+#define MSG_1 "Some of you will die, but its a sacriifice im willing "
 ///////////////////////////////////////////////////////////////////////////////]
 // memset, 
 void	ft_ini(int ac, char **av, t_data *data)
 {
 	ft_memset(data, 0, sizeof(t_data));
 	ft_check_args(ac, av, data);
-	if (data->time_to_die < data->time_to_eat + data->time_to_sleep)
+	if (data->tt_die < data->tt_eat + data->tt_sleep)
 		put(ERR"WONT SOMEBODY PLEASE THINK OF THE CHILDREN ?!?\n\n");
-	if (data->time_to_die <= data->time_to_eat * (2 + data->num_philo % 2))
-		put("Some of you will die, but its a sacriifice im willing to make!\n\n");
-	data->time_to_think = data->time_to_eat + data->time_to_sleep
-		+ (data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2;
+	if (data->tt_die <= data->tt_eat * (2 + data->num_philo % 2))
+		put(MSG_1"to make!\n\n");
+	data->tt_think = data->tt_eat + data->tt_sleep
+		+ (data->tt_die - (data->tt_eat + data->tt_sleep)) / 2;
 	gettimeofday(&data->time_start, NULL);
 	pthread_mutex_init(&data->someone_dead_m, NULL);
 	ft_ini_philo(data);
@@ -52,13 +53,13 @@ static void	ft_check_args(int ac, char **av, t_data *data)
 	else
 		return (put(ERR"bad number of args\n"), exit(0));
 	data->num_philo = ft_atoi(av[1], &err);
-	data->time_to_die = ft_atoi(av[2], &err);
-	data->time_to_eat = ft_atoi(av[3], &err);
-	data->time_to_sleep = ft_atoi(av[4], &err);
+	data->tt_die = ft_atoi(av[2], &err);
+	data->tt_eat = ft_atoi(av[3], &err);
+	data->tt_sleep = ft_atoi(av[4], &err);
 	if (err)
 		return (put(ERR"is that a number?\n"), exit(0));
-	if (data->num_philo < 0 || data->time_to_die < 0 || data->time_to_eat
-		< 0 || data->time_to_sleep < 0)
+	if (data->num_philo < 0 || data->tt_die < 0 || data->tt_eat
+		< 0 || data->tt_sleep < 0)
 		return (put(ERR"negative arg\n"), exit(0));
 	if (data->num_philo == 0)
 		return (put(ERR"Philosophers are an extinct race\n"), exit(0));
@@ -73,7 +74,8 @@ static void	ft_ini_philo(t_data *data)
 	data->philos = (t_philo *)mem(0, sizeof(t_philo) * data->num_philo);
 	if (!data->philos)
 		return (put(ERRM"malloc 0\n"), exit(1));
-	data->forks = (pthread_mutex_t *)mem(0, sizeof(pthread_mutex_t) * data->num_philo);
+	data->forks = (pthread_mutex_t *)mem(0, sizeof(pthread_mutex_t)
+			* data->num_philo);
 	if (!data->forks)
 		return (put(ERRM"malloc 1\n"), free_s(data->philos), exit(1));
 	i = -1;

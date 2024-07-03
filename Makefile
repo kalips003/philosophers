@@ -12,7 +12,7 @@ all: $(NAME)
 # ╰──────────────────────────────────────────────────────────────────────╯
 NAMEE = philosophers
 NAMEE_BONUS = philosophers_b
-# num_philo . time_to_die . time_to_eat . time_to_sleep . [num_time_each_philosopher_must_eat]
+# num_philo . tt_die . tt_eat . tt_sleep . [num_time_each_philosopher_must_eat]
 NUM_PHILO = 5
 TIME_DIE = 605
 TIME_EAT = 300
@@ -27,7 +27,7 @@ a: $(NAME)
 	./$(word 1, $^) $(ARG)
 
 c: $(NAME)
-	@$(call random_shmol_cat, teshting ... $@ !, 'hav fun ね? ($(word 1, $^))', $(CLS), );
+	@$(call random_shmol_cat, teshting ... $@: $(ARG2), 'hav fun ね? ($(word 1, $^))', $(CLS), );
 	./$(word 1, $^) $(ARG2)
 
 b: $(NAME_BONUS)
@@ -36,8 +36,8 @@ b: $(NAME_BONUS)
 
 # valgrind + threads = ???
 v: $(NAME)
-	@$(call random_shmol_cat, "vlgrininnng ... $(NAME_BONUS)!", "$@: $(MAP1)", $(CLS), );
-	-$(VALGRIND) ./$(word 1, $^) $(ARG)
+	@$(call random_shmol_cat, "vlgrininnng ... $(word 1, $^)!", "$(ARG2)", $(CLS), );
+	-$(VALGRIND) ./$(word 1, $^) $(ARG2)
 
 BAD_ARGS = "3 5 1 1 2a" \
 			"3 5 1 wtf" \
@@ -231,15 +231,15 @@ git: fclean
 	git commit -m "$$current_date"; \
 	git push
 
-NORM_FILE = srcb/
+NORM_FILE = src/
 
 norm: fclean
 	@$(call random_shmol_cat_blink, 掃除してるかな..、いいね、いいねえー, giv file to norm, $(CLS), );
 	-@read -p 'file...:' path; \
 	if [ -z "$$path" ]; then \
-		watch norminette $(NORM_FILE); \
+		watch -n 0.2 norminette $(NORM_FILE); \
 	else \
-		watch norminette $$path; \
+		watch -n 0.2 norminette $$path; \
 	fi
 
 #

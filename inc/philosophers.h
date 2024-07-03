@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:55:43 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/03 16:10:40 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 17:46:12 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef unsigned int useconds_t;
 //			▒█░░▒█ ▒█░▒█ ▒█░░▀█ ▒█▄▄▀ ▒█░▒█ ░▒█░░ ▒█▄▄▄█ ▒█░▒█ ░░▒█░░
 //useconds_t
 ///////////////////////////////////////////////////////////////////////////////]
-// num_philo . time_to_die . time_to_eat . time_to_sleep . [max_meal]
+// num_philo . tt_die . tt_eat . tt_sleep . [max_meal]
 
 // struct timeval {
 // 	time_t	  tv_sec;  // seconds
@@ -54,12 +54,12 @@ typedef struct s_data
 	struct timeval	time_start;
 
 	int			num_philo;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
+	int			tt_die;
+	int			tt_eat;
+	int			tt_sleep;
 	int			max_meal;
 
-	int			time_to_think;
+	int			tt_think;
 	int			someone_dead;
 	pthread_mutex_t	someone_dead_m;
 }	t_data;
@@ -90,12 +90,12 @@ void		ft_ini(int ac, char **av, t_data *data);
 /********************************
 		B
 ********************************/
-void	*ft_thread_starve(void *arg);
 int		is_dead(t_philo *philo);
 
 void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
+void	philo_speech(t_philo *philo, char *state, char rl);
 
 /********************************
 		C
