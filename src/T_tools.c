@@ -6,16 +6,16 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/03 14:35:06 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 15:29:54 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long	get_time_diff_in_milli(struct timeval time);
+long	diff_time_ms(struct timeval time);
 
 ///////////////////////////////////////////////////////////////////////////////]
-long	get_time_diff_in_milli(struct timeval time)
+long	diff_time_ms(struct timeval time)
 {
 	struct timeval	time_now;
 	long			diff_us;

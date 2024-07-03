@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/03 15:08:10 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 16:27:59 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ void	ft_ini(int ac, char **av, t_data *data)
 	ft_memset(data, 0, sizeof(t_data));
 	ft_check_args(ac, av, data);
 	if (data->time_to_die < data->time_to_eat + data->time_to_sleep)
-		put(ERR"WONT SOMEBODY PLEASE THINK OF THE CHILDREN ?!?\n");
+		put(ERR"WONT SOMEBODY PLEASE THINK OF THE CHILDREN ?!?\n\n");
 	if (data->time_to_die <= data->time_to_eat * (2 + data->num_philo % 2))
-		put("Some of you will die, but its a sacriifice im willing to make!\n");
-	data->time_to_think = (data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2;
+		put("Some of you will die, but its a sacriifice im willing to make!\n\n");
+	data->time_to_think = data->time_to_eat + data->time_to_sleep
+		+ (data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2;
 	gettimeofday(&data->time_start, NULL);
 	pthread_mutex_init(&data->someone_dead_m, NULL);
 	ft_ini_philo(data);
@@ -98,7 +99,7 @@ static void	h_982(t_data *data, t_philo *philo, int i)
 		philo->fork_r = &data->forks[i - 1];
 		philo->fork_l = &data->forks[i];
 	}
-	philo->philo_i = i;
+	philo->i = i;
 	philo->data = data;
 	philo->time = data->time_start;
 	pthread_mutex_init(&data->forks[i - 1], NULL);

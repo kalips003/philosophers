@@ -20,10 +20,10 @@ TIME_SLEEP = 300
 
 
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
-ARG2 = 1 4 2 1 1
+ARG2 = 5 1000 300 600 2
 
 a: $(NAME)
-	@$(call random_shmol_cat, teshting ... $@ !, 'hav fun ね? ($(word 1, $^))', $(CLS), );
+	@$(call random_shmol_cat, teshting ... $@: $(ARG), 'hav fun ね? ($(word 1, $^))', $(CLS), );
 	./$(word 1, $^) $(ARG)
 
 c: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:55:43 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/03 14:28:50 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/03 16:10:40 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	pthread_t		thread_id;
-	int				philo_i;
+	int				i;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
 	struct timeval	time;
@@ -91,19 +91,20 @@ void		ft_ini(int ac, char **av, t_data *data);
 		B
 ********************************/
 void	*ft_thread_starve(void *arg);
-void	*ft_philo(void *arg);
+int		is_dead(t_philo *philo);
 
 void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
 
-
-
-
+/********************************
+		C
+********************************/
+void	*ft_philo(void *arg);
 /********************************
 		Z
 ********************************/
-long	get_time_diff_in_milli(struct timeval time);
+long	diff_time_ms(struct timeval time);
 
 void	end(t_data *data, int exit_code);
 
