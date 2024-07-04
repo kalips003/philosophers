@@ -1,5 +1,5 @@
-NAME = philosophers
-NAME_BONUS = philosophers_b
+NAME = philo
+NAME_BONUS = philo_b
 
 CC = cc
 # FLAGS = -Wextra -Wall -g -fPIE -I$(HEADER_FOLDER)
@@ -10,8 +10,8 @@ all: $(NAME)
 # ╭──────────────────────────────────────────────────────────────────────╮
 # │                  	 	        TESTING                    	         │
 # ╰──────────────────────────────────────────────────────────────────────╯
-NAMEE = philosophers
-NAMEE_BONUS = philosophers_b
+NAMEE = philo
+NAMEE_BONUS = philo_b
 # num_philo . tt_die . tt_eat . tt_sleep . [num_time_each_philosopher_must_eat]
 NUM_PHILO = 6
 TIME_DIE = 605
@@ -20,7 +20,7 @@ TIME_SLEEP = 300
 
 
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
-ARG2 = 5 1000 300 600 2
+ARG2 = 5 100 33 66 3
 
 a: $(NAME)
 	@$(call random_shmol_cat, teshting ... $@: $(ARG), 'hav fun ね? ($(word 1, $^))', $(CLS), );
@@ -37,7 +37,7 @@ b: $(NAME_BONUS)
 # valgrind + threads = ???
 v: $(NAME)
 	@$(call random_shmol_cat, "vlgrininnng ... $(word 1, $^)!", "$(ARG2)", $(CLS), );
-	-$(VALGRIND) ./$(word 1, $^) $(ARG2)
+	-$(HELLGRIND) ./$(word 1, $^) $(ARG2)
 
 BAD_ARGS = "3 5 1 1 2a" \
 			"3 5 1 wtf" \
@@ -65,7 +65,7 @@ BAD_ARGS_INF = "0 5 2 1" \
 n: $(NAMEE)
 	@for arg in $(BAD_ARGS); do \
 	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
-	$(VALGRIND) ./$(word 1, $^) $$arg; \
+	$(HELLGRIND) ./$(word 1, $^) $$arg; \
 	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
 	done
 	@$(call random_shmol_cat, this one is for valgriind output only:, valgrind doesnt like philosophers、some will die, $(CLS), )
@@ -76,11 +76,11 @@ n: $(NAMEE)
 m: $(NAMEE)
 	@for arg in $(BAD_ARGS_INF); do \
 	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
-	./$(word 1, $^) $$arg; \
+	$(HELLGRIND) ./$(word 1, $^) $$arg; \
 	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
 	done
 
-ULIMIT = 15
+ULIMIT = 4500
 m2: $(NAME)
 	@$(call random_shmol_cat, "\'trying to make shit crash", "try n break it.. にゃ?", $(CLS), );
 	@(ulimit -s $(ULIMIT); ./$(word 1, $^) $(ARG))
@@ -215,6 +215,8 @@ re_bonus: fclean
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - -  - VALGRIND
 # VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --track-fds=yes
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s --trace-children=yes --track-fds=yes
+VALGRIND_OTHER = valgrind --vgdb=yes
+HELLGRIND = valgrind --tool=helgrind
 #
 # 	monitor stack activiity
 # valgrind --tool=massif --stacks=yes ./your_program

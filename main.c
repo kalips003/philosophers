@@ -6,11 +6,11 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:53:58 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/03 15:05:40 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 04:14:50 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philo.h"
 
 /*******************************************************************************
 ******************************************************************************/
@@ -57,12 +57,14 @@ int	main(int ac, char **av)
 	i = -1;
 	while (++i < data.num_philo)
 	{
-		if (pthread_create(&(data.philos[i].thread_id), NULL, &ft_philo, &data.philos[i]))
+		if (pthread_create(&data.philos[i].thread_id, NULL, &ft_philo, &data.philos[i]))
 			return (put("Error creating thread for philosopher %d\n"), 1);
 	}
 	i = -1;
 	while (++i < data.num_philo)
 		pthread_join(data.philos[i].thread_id, NULL);
+	safe_inc(&data.end, &data.end_m);
+	pthread_join(data.thread_watcher, NULL);
 	end(&data, 0);
 	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/03 17:54:08 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 04:14:50 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philo.h"
 
 void		ft_ini(int ac, char **av, t_data *data);
 static void	ft_check_args(int ac, char **av, t_data *data);
@@ -32,7 +32,10 @@ void	ft_ini(int ac, char **av, t_data *data)
 		+ (data->tt_die - (data->tt_eat + data->tt_sleep)) / 2;
 	gettimeofday(&data->time_start, NULL);
 	pthread_mutex_init(&data->someone_dead_m, NULL);
+	pthread_mutex_init(&data->someone_talk_m, NULL);
+	pthread_mutex_init(&data->end_m, NULL);
 	ft_ini_philo(data);
+	pthread_create(&data->thread_watcher, NULL, &ft_watcher, data);
 }
 
 ///////////////////////////////////////////////////////////////////////////////]
@@ -105,4 +108,6 @@ static void	h_982(t_data *data, t_philo *philo, int i)
 	philo->data = data;
 	philo->time = data->time_start;
 	pthread_mutex_init(&data->forks[i - 1], NULL);
+	pthread_mutex_init(&philo->time_m, NULL);
+	pthread_mutex_init(&philo->dead_m, NULL);
 }
