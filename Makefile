@@ -18,7 +18,7 @@ TIME_DIE = 605
 TIME_EAT = 300
 TIME_SLEEP = 300
 
-ARG_SET_33 = 200 800 200 200 200
+ARG_SET_33 = 200 800 200 200 20
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
 ARG2 = 5 100 33 66 3
 
@@ -34,7 +34,12 @@ b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );
 	$(VALGRIIND) ./$(word 1, $^) $(ARG)
 
-# valgrind + threads = ???
+d:	$(NAMEE)
+	-@$(call random_shmol_cat, "\'teshting the limits of the food chain: MANY MIANY PHILO", $(ARG_SET_15), $(CLS), )
+	@echo "\n\tTHIS ONE WILL TAKE A LOTS OF TIME\n\tthe output will be grep for 'died'\n";
+	-./$(word 1, $^) $(ARG_SET_33) | grep died
+	@(echo "\n\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key);
+
 v: $(NAME)
 	@$(call random_shmol_cat, "vlgrininnng ... $(word 1, $^)!", "$(ARG2)", $(CLS), );
 	-$(HELLGRIND) ./$(word 1, $^) $(ARG2)
@@ -55,6 +60,7 @@ ARG_SET_11 = 5 100 33 66
 ARG_SET_12 = 8 15 5 5 10
 ARG_SET_13 = 3 4 1 1 5
 ARG_SET_14 = 7 250 50 150
+ARG_SET_15 = 200 800 200 200 200
 
 # MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
 #

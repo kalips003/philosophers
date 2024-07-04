@@ -79,11 +79,12 @@ m: $(NAMEE)
 	-@$(call helper_tester, $(ARG_SET_12), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
 	-@$(call helper_tester, $(ARG_SET_13), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
 	-@$(call random_shmol_cat, "\'teshting the limits of the food chain: MANY MIANY PHILO", $(ARG_SET_15), $(CLS), )
-	echo "\n\tTHIS ONE WILL TAKE A LOTS OF TIME\n\tthe output will be grep for 'died'\n"; read -p "" key;
-	./$(word 1, $^) $(ARG_SET_15) | grep died
-	echo "\n\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key;
+	@echo "\n\tTHIS ONE WILL TAKE A LOTS OF TIME\n\tgrep return 1 if no match found\n";
+	-./$(word 1, $^) $(ARG_SET_15) | grep died
+	@echo "\n\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key;
 	-@$(call helper_tester, $(ARG_SET_14), "\'teshting the limits of the food chain:", They all should be HAPPY、and enjoy their last moment before the end..., timeout 10s $(HELLGRIND))
 	@$(call random_shmol_cat, \033[5m(DISCLAIMER)\033[25m, No philosophers was harmed in the making of this test, $(CLS), );
+
 
 ARG_SET_1 = 0 60 60 60
 ARG_SET_2 = 1 1000 60 60
