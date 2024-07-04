@@ -18,7 +18,7 @@ TIME_DIE = 605
 TIME_EAT = 300
 TIME_SLEEP = 300
 
-
+ARG_SET_33 = 200 800 200 200 200
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
 ARG2 = 5 100 33 66 3
 
@@ -27,8 +27,8 @@ a: $(NAME)
 	./$(word 1, $^) $(ARG)
 
 c: $(NAME)
-	@$(call random_shmol_cat, teshting ... $@: $(ARG_SET_3), 'hav fun ね? ($(word 1, $^))', $(CLS), );
-	timeout 3s $(HELLGRIND) ./$(word 1, $^) $(ARG_SET_14)
+	@$(call random_shmol_cat, teshting ... $@: $(ARG_SET_33), 'hav fun ね? ($(word 1, $^))', $(CLS), );
+	$(HELLGRIND) ./$(word 1, $^) $(ARG_SET_33)
 
 b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );

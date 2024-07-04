@@ -1,6 +1,6 @@
 
 # ------------------------------------------------------------------------------------------------------------- >
-# 
+#
 # 				████████╗███████╗░██████╗████████╗███████╗██╗░░░██╗██████╗░
 # 				╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝██╔════╝██║░░░██║██╔══██╗
 # 				░░░██║░░░█████╗░░╚█████╗░░░░██║░░░█████╗░░██║░░░██║██████╔╝
@@ -31,14 +31,14 @@ TIME_SLEEP = 300
 ARGZ = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
 
 # MAKE A: Run with argz
-# 
+#
 a: $(NAMEE)
 	@$(call random_shmol_cat, "\'tis $(NAMEE): $(ARG)", 死ぬかな..., $(CLS), );
 	./$(word 1, $^) $(ARGZ)
 
 
 # MAKE N: Run a dozen bad arguments, with valgrind
-# 
+#
 n: $(NAMEE)
 	@for arg in $(BAD_ARGS); do \
 	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
@@ -62,8 +62,8 @@ BAD_ARGS = "3 5 1 1 2a" \
 
 
 # MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
-# 
-m: $(NAME)
+#
+m: $(NAMEE)
 	-@$(call helper_tester, $(ARG_SET_1), "\'teshting the limits of the food chain:", shouldnt work, $(HELLGRIND))
 	-@$(call helper_tester, $(ARG_SET_2), "\'teshting the limits of the food chain:", should die without sleep, timeout 3s $(HELLGRIND))
 	-@$(call helper_tester, $(ARG_SET_22), "\'teshting the limits of the food chain:", one should die, timeout 3s $(HELLGRIND))
@@ -78,6 +78,10 @@ m: $(NAME)
 	-@$(call helper_tester, $(ARG_SET_11), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, timeout 3s)
 	-@$(call helper_tester, $(ARG_SET_12), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
 	-@$(call helper_tester, $(ARG_SET_13), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
+	-@$(call random_shmol_cat, "\'teshting the limits of the food chain: MANY MIANY PHILO", $(ARG_SET_15), $(CLS), )
+	echo "\n\tTHIS ONE WILL TAKE A LOTS OF TIME\n\tthe output will be grep for 'died'\n"; read -p "" key;
+	./$(word 1, $^) $(ARG_SET_15) | grep died
+	echo "\n\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key;
 	-@$(call helper_tester, $(ARG_SET_14), "\'teshting the limits of the food chain:", They all should be HAPPY、and enjoy their last moment before the end..., timeout 10s $(HELLGRIND))
 	@$(call random_shmol_cat, \033[5m(DISCLAIMER)\033[25m, No philosophers was harmed in the making of this test, $(CLS), );
 
@@ -96,6 +100,7 @@ ARG_SET_11 = 5 100 33 66
 ARG_SET_12 = 8 15 5 5 10
 ARG_SET_13 = 3 4 1 1 5
 ARG_SET_14 = 7 250 50 150
+ARG_SET_15 = 200 800 200 200 200
 
 # ------------------------------------------------------------------------------------------------------------- >
 # $(1)=$(ARGS) $(2)=$(TXT_cat) $(3)=$(TXT_below) $(4)=$(VALGRIND)(timeout 15s)
