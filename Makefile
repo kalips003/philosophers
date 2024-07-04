@@ -28,7 +28,7 @@ a: $(NAME)
 
 c: $(NAME)
 	@$(call random_shmol_cat, teshting ... $@: $(ARG_SET_3), 'hav fun ね? ($(word 1, $^))', $(CLS), );
-	./$(word 1, $^) $(ARG_SET_3)
+	timeout 3s $(HELLGRIND) ./$(word 1, $^) $(ARG_SET_14)
 
 b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );
@@ -57,7 +57,7 @@ ARG_SET_13 = 3 4 1 1 5
 ARG_SET_14 = 7 250 50 150
 
 # MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
-# 
+#
 m: $(NAME)
 	-@$(call helper_tester, $(ARG_SET_1), "\'teshting the limits of the food chain:", shouldnt work, $(HELLGRIND))
 	-@$(call helper_tester, $(ARG_SET_2), "\'teshting the limits of the food chain:", should die without sleep, timeout 3s $(HELLGRIND))
@@ -78,7 +78,7 @@ m: $(NAME)
 
 
 # MAKE N: Run a dozen bad arguments, with valgrind
-# 
+#
 n: $(NAMEE)
 	@for arg in $(BAD_ARGS); do \
 	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
