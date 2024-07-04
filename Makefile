@@ -32,7 +32,7 @@ c: $(NAME)
 
 b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );
-	./$(word 1, $^) $(ARG)
+	$(VALGRIIND) ./$(word 1, $^) $(ARG)
 
 # valgrind + threads = ???
 v: $(NAME)
@@ -69,7 +69,7 @@ n: $(NAMEE)
 	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
 	done
 	@$(call random_shmol_cat, this one is for valgriind output only:, valgrind doesnt like philosophers、some will die, $(CLS), )
-	$(VALGRIND) ./$(word 1, $^) 3 15 2 1 2
+	$(VALGRIIND) ./$(word 1, $^) 3 500 100 200 2
 
 # MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
 # 
@@ -79,8 +79,11 @@ m: $(NAMEE)
 	$(HELLGRIND) ./$(word 1, $^) $$arg; \
 	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
 	done
+	@$(call random_shmol_cat, dis last one should live forever:, "5 100 33 66 3", $(CLS), )
+	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
+	./$(word 1, $^) 5 100 33 66 3
 
-ULIMIT = 4500
+ULIMIT = 3000
 m2: $(NAME)
 	@$(call random_shmol_cat, "\'trying to make shit crash", "try n break it.. にゃ?", $(CLS), );
 	@(ulimit -s $(ULIMIT); ./$(word 1, $^) $(ARG))
@@ -233,7 +236,7 @@ git: fclean
 	git commit -m "$$current_date"; \
 	git push
 
-NORM_FILE = src/
+NORM_FILE = src/ main.c main_bonus.c
 
 norm: fclean
 	@$(call random_shmol_cat_blink, 掃除してるかな..、いいね、いいねえー, giv file to norm, $(CLS), );
