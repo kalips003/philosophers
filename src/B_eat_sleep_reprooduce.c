@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   B2_eat_sleep_reprooduce.c                          :+:      :+:    :+:   */
+/*   B_eat_sleep_reprooduce.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 01:02:23 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/04 04:18:08 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 04:44:50 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ int	ft_eat(t_philo *philo)
 		if (ft_eat_0(philo))
 			return (1);
 	}
+	safe_update_time(&philo->time, &philo->time_m);
 	philo_speech(philo, " == is eating", 0);
 	philo->doing = EATING;
-	safe_update_time(&philo->time, &philo->time_m);
 	return (0);
 }
 
