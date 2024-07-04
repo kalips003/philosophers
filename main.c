@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:53:58 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/04 05:01:10 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:34:58 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int ac, char **av)
 				&ft_philo, &data.philos[i]))
 			return (put("Error creating thread for philosopher %d\n"), 1);
 	}
+	pthread_create(&data.thread_watcher, NULL, &ft_watcher, &data);
 	i = -1;
 	while (++i < data.num_philo)
 		pthread_join(data.philos[i].thread_id, NULL);

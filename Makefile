@@ -27,8 +27,8 @@ a: $(NAME)
 	./$(word 1, $^) $(ARG)
 
 c: $(NAME)
-	@$(call random_shmol_cat, teshting ... $@: $(ARG2), 'hav fun ね? ($(word 1, $^))', $(CLS), );
-	./$(word 1, $^) $(ARG2)
+	@$(call random_shmol_cat, teshting ... $@: $(ARG_SET_3), 'hav fun ね? ($(word 1, $^))', $(CLS), );
+	./$(word 1, $^) $(ARG_SET_3)
 
 b: $(NAME_BONUS)
 	@$(call random_shmol_cat, teshting ... $@ !, " $(NAME_BONUS): ", $(CLS), );
@@ -44,7 +44,7 @@ ARG_SET_1 = 0 60 60 60
 ARG_SET_2 = 1 1000 60 60
 ARG_SET_22 = 2 500 300 60
 ARG_SET_4 = 6 200 99 99 5
-ARG_SET_3 = 200 121 60 60 2
+ARG_SET_3 = 200 250 50 70 2
 ARG_SET_5 = 7 200 99 99 5
 ARG_SET_6 = 7 210 70 139 5
 ARG_SET_7 = 7 210 70 140 5

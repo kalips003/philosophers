@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 06:21:51 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/04 04:14:50 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:34:24 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	ft_ini(int ac, char **av, t_data *data)
 	gettimeofday(&data->time_start, NULL);
 	pthread_mutex_init(&data->someone_dead_m, NULL);
 	pthread_mutex_init(&data->someone_talk_m, NULL);
-	pthread_mutex_init(&data->end_m, NULL);
 	ft_ini_philo(data);
-	pthread_create(&data->thread_watcher, NULL, &ft_watcher, data);
 }
 
 ///////////////////////////////////////////////////////////////////////////////]

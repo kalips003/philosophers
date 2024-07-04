@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:23:10 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/04 04:33:45 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:38:18 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void	philo_speech(t_philo *philo, char *state, char rl)
 	}
 	pthread_mutex_lock(&philo->data->someone_talk_m);
 	if (rl == 'r' || rl == 'l')
-		printf(C_231"%.3ld ms)\t"RESET C_401" \033[0;3%im(%i) "RESET
+		printf(C_231"%.3ld ms)\t"RESET C_401" \033[38;5;%im(%i) "RESET
 			C_123"%s his %s fork "C_025"nᵒ%d\n"RESET,
 			time_diff, philo->i % 256, philo->i, state, hand, fork);
 	else
-		printf(C_231"%.3ld ms)\t"RESET C_401" \033[0;3%im(%i) "RESET"%s\n"
+		printf(C_231"%.3ld ms)\t"RESET C_401" \033[38;5;%im(%i) "RESET"%s\n"
 			RESET, time_diff, philo->i % 256, philo->i, state);
 	pthread_mutex_unlock(&philo->data->someone_talk_m);
 }
