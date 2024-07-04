@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:55:43 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/04 04:35:58 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:26:28 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # define EATING 1
 # define SLEEPING 2
 
-#ifndef _USECONDS_T
-typedef unsigned int useconds_t;
-#endif
+// # ifndef _USECONDS_T
+// typedef unsigned int	useconds_t;
+// # endif
 
 ///////////////////////////////////////////////////////////////////////////////]
 //
