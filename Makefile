@@ -39,26 +39,43 @@ v: $(NAME)
 	@$(call random_shmol_cat, "vlgrininnng ... $(word 1, $^)!", "$(ARG2)", $(CLS), );
 	-$(HELLGRIND) ./$(word 1, $^) $(ARG2)
 
-BAD_ARGS = "3 5 1 1 2a" \
-			"3 5 1 wtf" \
-			"3 5 1 -2147483648 -2147483650" \
-			"3 5 1 2147483646 2147483647" \
-			"3 5 1 9999999999 9" \
-			"4 3 2" \
-			"4 3 2 1 1 1" \
-			"" \
-			" "  \
-			"4 3 - 00000" \
-			"i want ... youuu" \
-			"5 1-2 4 5"
 
-BAD_ARGS_INF = "0 5 2 1" \
-			"1 100 50 5" \
-			"500 5 2 1" \
-			"7 100 200 5" \
-			"7 100 10 300" \
-			"6 100 49 49 3" \
-			"5 100 33 66 3"
+ARG_SET_1 = 0 60 60 60
+ARG_SET_2 = 1 1000 60 60
+ARG_SET_22 = 2 500 300 60
+ARG_SET_4 = 6 200 99 99 5
+ARG_SET_3 = 200 121 60 60 2
+ARG_SET_5 = 7 200 99 99 5
+ARG_SET_6 = 7 210 70 139 5
+ARG_SET_7 = 7 210 70 140 5
+ARG_SET_8 = 7 100 10 300
+ARG_SET_9 = 7 100 300 10
+ARG_SET_10 = 6 100 49 49
+ARG_SET_11 = 5 100 33 66
+ARG_SET_12 = 8 15 5 5 10
+ARG_SET_13 = 3 4 1 1 5
+ARG_SET_14 = 7 250 50 150
+
+# MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
+# 
+m: $(NAME)
+	-@$(call helper_tester, $(ARG_SET_1), "\'teshting the limits of the food chain:", shouldnt work, $(HELLGRIND))
+	-@$(call helper_tester, $(ARG_SET_2), "\'teshting the limits of the food chain:", should die without sleep, timeout 3s $(HELLGRIND))
+	-@$(call helper_tester, $(ARG_SET_22), "\'teshting the limits of the food chain:", one should die, timeout 3s $(HELLGRIND))
+	-@$(call helper_tester, $(ARG_SET_4), "\'teshting the limits of the food chain:", should all live happily ever after, )
+	-@$(call helper_tester, $(ARG_SET_3), "\'teshting the limits of the food chain: MANY MIANY PHILO", should all live happily ever after, )
+	-@$(call helper_tester, $(ARG_SET_5), "\'teshting the limits of the food chain:", one should die, )
+	-@$(call helper_tester, $(ARG_SET_6), "\'teshting the limits of the food chain:", should all live happily ever after, )
+	-@$(call helper_tester, $(ARG_SET_7), "\'teshting the limits of the food chain:", live or die? maybe?, )
+	-@$(call helper_tester, $(ARG_SET_8), "\'teshting the limits of the food chain:", should stop after the first death in their sleep, timeout 3s $(HELLGRIND))
+	-@$(call helper_tester, $(ARG_SET_9), "\'teshting the limits of the food chain:", should stop after the first death while eating, timeout 3s $(HELLGRIND))
+	-@$(call helper_tester, $(ARG_SET_10), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, timeout 3s)
+	-@$(call helper_tester, $(ARG_SET_11), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, timeout 3s)
+	-@$(call helper_tester, $(ARG_SET_12), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
+	-@$(call helper_tester, $(ARG_SET_13), "\'teshting the limits of the food chain: SMALL TIMES", are you fast enough?, )
+	-@$(call helper_tester, $(ARG_SET_14), "\'teshting the limits of the food chain:", They all should be HAPPY、and enjoy their last moment before the end..., timeout 10s $(HELLGRIND))
+	@$(call random_shmol_cat, \033[5m(DISCLAIMER)\033[25m, No philosophers was harmed in the making of this test, $(CLS), );
+
 
 # MAKE N: Run a dozen bad arguments, with valgrind
 # 
@@ -71,23 +88,33 @@ n: $(NAMEE)
 	@$(call random_shmol_cat, this one is for valgriind output only:, valgrind doesnt like philosophers、some will die, $(CLS), )
 	$(VALGRIIND) ./$(word 1, $^) 3 500 100 200 2
 
-# MAKE M: Run life threatening arguments (no valgrind, make things fucked up)
-# 
-m: $(NAMEE)
-	@for arg in $(BAD_ARGS_INF); do \
-	$(call random_shmol_cat, teshting lots of bad args:, $$arg, $(CLS), ); \
-	$(HELLGRIND) ./$(word 1, $^) $$arg; \
-	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
-	done
-	@$(call random_shmol_cat, dis last one should live forever:, "5 100 33 66 3", $(CLS), )
-	echo "\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key; \
-	./$(word 1, $^) 5 100 33 66 3
+BAD_ARGS = "3 5 1 1 2a" \
+			"3 5 1 wtf" \
+			"3 5 1 -2147483650" \
+			"3 5 1 2147483646 2147483647" \
+			"3 5 1 9999999999 9" \
+			"4 3 2" \
+			"4 3 2 1 1 1" \
+			"" \
+			"4 3 2 00000000000000 -" \
+			"i want ... youuu" \
+			"5 1-2 4 5"
+
 
 ULIMIT = 3000
 m2: $(NAME)
 	@$(call random_shmol_cat, "\'trying to make shit crash", "try n break it.. にゃ?", $(CLS), );
 	@(ulimit -s $(ULIMIT); ./$(word 1, $^) $(ARG))
 	ulimit -s 8192
+
+# $(1)=$(ARGS) $(2)=$(TXT_cat) $(3)=$(TXT_below) $(4)=$(VALGRIND)(timeout 15s)
+define helper_tester
+	$(call random_shmol_cat, $(2), $(1), $(CLS), )
+	echo "\n\t$(3)\n"
+	read -p "" key;
+	$(4) ./$(word 1, $^) $(1)
+	echo "\n\t\033[5m~ Press Enter to continue...\033[0m"; read -p "" key;
+endef
 
 # ╭──────────────────────────────────────────────────────────────────────╮
 # │                  	 	        SOURCES                    	         │
