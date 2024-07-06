@@ -33,7 +33,7 @@ ARGZ = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP) 3
 # MAKE A: Run with argz
 #
 a: $(NAMEE)
-	@$(call random_shmol_cat, "\'tis $(NAMEE): $(ARG)", 死ぬかな..., $(CLS), );
+	@$(call random_shmol_cat, "\'tis $(NAMEE): $(ARGZ)", 死ぬかな..., $(CLS), );
 	./$(word 1, $^) $(ARGZ)
 
 

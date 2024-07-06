@@ -6,7 +6,7 @@
 /*   By: kalipso <kalipso@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 01:02:23 by kalipso           #+#    #+#             */
-/*   Updated: 2024/07/04 04:44:50 by kalipso          ###   ########.fr       */
+/*   Updated: 2024/07/06 23:52:32 by kalipso          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	ft_sleep(t_philo *philo)
 		< philo->data->tt_eat)
 		return (0);
 	pthread_mutex_unlock(philo->fork_r);
-	philo_speech(philo, "\tputs back", 'r');
+	// philo_speech(philo, "\tputs back", 'r');
 	pthread_mutex_unlock(philo->fork_l);
-	philo_speech(philo, "\tputs back", 'l');
+	// philo_speech(philo, "\tputs back", 'l');
 	philo->in_hand = 0;
 	philo->time_eaten++;
 	if (philo->time_eaten == philo->data->max_meal)
@@ -91,26 +91,16 @@ int	ft_sleep(t_philo *philo)
 }
 
 ///////////////////////////////////////////////////////////////////////////////]
-// void	ft_think(t_philo *p)
-// {
-// 	if (p->doing != SLEEPING || diff_time_ms(&p->time, &p->time_m)
-// 			> p->data->tt_eat + p->data->tt_sleep)
-// 		return ;
-// 	philo_speech(p, " == == == is thinking", 0);
-// 	p->doing = THINKING;
-// }
-
-///////////////////////////////////////////////////////////////////////////////]
 // for even numbers , start with left hand
 static int	ft_eat_0(t_philo *philo)
 {
-	philo_speech(philo, "\tWAITING for", 'l');
+	// philo_speech(philo, "\tWAITING for", 'l');
 	pthread_mutex_lock(philo->fork_l);
 	philo->in_hand |= 0b10;
 	if (is_dead(philo))
 		return (1);
 	philo_speech(philo, C_321"\thas taken", 'l');
-	philo_speech(philo, "\tWAITING for", 'r');
+	// philo_speech(philo, "\tWAITING for", 'r');
 	pthread_mutex_lock(philo->fork_r);
 	philo->in_hand |= 0b01;
 	if (is_dead(philo))
@@ -124,7 +114,7 @@ static int	ft_eat_1(t_philo *philo)
 {
 	if (philo->in_hand)
 		return (0);
-	philo_speech(philo, "\tWAITING for", 'r');
+	// philo_speech(philo, "\tWAITING for", 'r');
 	pthread_mutex_lock(philo->fork_r);
 	philo->in_hand |= 0b01;
 	if (is_dead(philo))
@@ -132,7 +122,7 @@ static int	ft_eat_1(t_philo *philo)
 	philo_speech(philo, C_321"\thas taken", 'r');
 	if (philo->data->num_philo == 1)
 		return (0);
-	philo_speech(philo, "\tWAITING for", 'l');
+	// philo_speech(philo, "\tWAITING for", 'l');
 	pthread_mutex_lock(philo->fork_l);
 	philo->in_hand |= 0b10;
 	if (is_dead(philo))

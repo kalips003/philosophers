@@ -34,9 +34,11 @@ ARG_SET_33 = 200 800 200 200 20
 ARG = $(NUM_PHILO) $(TIME_DIE) $(TIME_EAT) $(TIME_SLEEP)
 ARG2 = 5 100 33 66 3
 
+ARG_SET_66 = 4 500 249 251
+
 a: $(NAME)
 	@$(call random_shmol_cat, teshting ... $@: $(ARG), 'hav fun ね? ($(word 1, $^))', $(CLS), );
-	./$(word 1, $^) $(ARG)
+	./$(word 1, $^) $(ARG_SET_66)
 
 c: $(NAME)
 	@$(call random_shmol_cat, teshting ... $@: $(ARG_SET_33), 'hav fun ね? ($(word 1, $^))', $(CLS), );
@@ -178,9 +180,12 @@ libtest:
 # │                  	 	       PROJECT                   	         │
 # ╰──────────────────────────────────────────────────────────────────────╯
 
+FLAGS_MLX = -Lmlx_linux -lmlx_Linux -Imlx_linux -lXext -lX11 -lz
+FLAGS_OTHER = -lm -pthread
+
 $(NAME): libft $(OBJ) main.c
 	@clear
-	@if ! $(CC) $(FLAGS) $(OBJ) main.c lib/libft.a -lm -o $(NAME); then \
+	@if ! $(CC) $(FLAGS) $(OBJ) main.c lib/libft.a $(FLAGS_OTHER) -o $(NAME); then \
 		$(call print_cat, "", $(RED), $(GOLD), $(RED_L), $(call pad_word, 10, "ERROR"), $(call pad_word, 12, "COMPILING..")); \
 		exit 1; \
 	fi
@@ -203,7 +208,6 @@ src/obj/%.o: src/%.c inc/$(NAME).h
 # │                  	 	       BONUS	                   	         │
 # ╰──────────────────────────────────────────────────────────────────────╯
 
-FLAGS_MLX = -Lmlx_linux -lmlx_Linux -Imlx_linux -lXext -lX11 -lz
 SRC_B = $(wildcard srcb/*.c)
 OBJ_B = $(patsubst srcb/%.c, srcb/obj/%.o, $(SRC_B))
 
